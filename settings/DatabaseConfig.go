@@ -3,6 +3,7 @@ package settings
 import (
 	"database/sql"
 	"fmt"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
 type DatabaseConfig struct{}
