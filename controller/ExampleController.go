@@ -11,11 +11,6 @@ type ExampleController struct {
 	model model.ExampleModel
 }
 
-// Interface
-type ExampleControllerInterface interface {
-	GetPostsController(c echo.Context) error
-}
-
 // Get Example Controller
 func (ExampleController ExampleController) GetPostsController(c echo.Context) error {
 	posts := ExampleController.model.GetPosts()

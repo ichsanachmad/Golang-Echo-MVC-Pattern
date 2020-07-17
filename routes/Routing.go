@@ -9,10 +9,6 @@ type Routing struct {
 	example controller.ExampleController
 }
 
-type RoutingInterface interface {
-	GetRoutes() *echo.Echo
-}
-
 func (Routing Routing) GetRoutes() *echo.Echo {
 	e := echo.New()
 	e.GET("/posts/", Routing.example.GetPostsController)
