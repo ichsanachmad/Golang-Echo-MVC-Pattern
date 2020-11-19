@@ -2,13 +2,15 @@ package model
 
 import (
 	"Golang-Echo-MVC-Pattern/entity"
-	"database/sql"
+	"Golang-Echo-MVC-Pattern/settings"
 )
 
-type ExampleModel struct{}
+type ExampleModel struct {
+	db settings.Database
+}
 
 // Get Example Post
-func (ExampleModel ExampleModel) GetPosts(secret string, db *sql.DB) []entity.ExampleEntity {
+func (ExampleModel ExampleModel) GetPosts(secret string) []entity.ExampleEntity {
 	posts := []entity.ExampleEntity{
 		{
 			Title:       "NewsOne",
@@ -28,48 +30,53 @@ func (ExampleModel ExampleModel) GetPosts(secret string, db *sql.DB) []entity.Ex
 }
 
 // Example For Insert Update and Delete
-//func (ExampleModel Model) InsertDb(exam ExampleStruct, db *sql.DB) bool {
+// Get Example Post
+//func (UserModel UserModel) IsEmailOrNoTelponExist(identity string) (bool, error) {
+//	sqlStatement := "SELECT is_email_no_telp_exist($1)"
+//	isExist := false
 //
-//	sqlStatement := "INSERT INTO daerah_kecamatan (kecamatan) " +
-//		"VALUES ($1)"
-//	res, err := db.Exec(sqlStatement,
-//		exam.Kecamatan,
-//	)
+//	err := UserModel.db.GetDatabase().QueryRow(context.Background(),
+//		sqlStatement,
+//		identity,
+//	).Scan(&isExist)
 //
 //	if err != nil {
-//		fmt.Println(err)
-//		return false
-//	} else {
-//		return true
+//		utils.LogError(err, utils.DetailFunction())
 //	}
 //
+//	return isExist, err
 //}
 
 // Example For Get From DB
-//func (ExampleModel Model) GetDb(db *sql.DB) Exams {
+//func (UserModel UserModel) GetUserBussinessTypesByUserID(userID string) (entity.BussinessTypeList, error) {
+//	sqlStatement := "SELECT * FROM get_jenis_usaha($1)"
 //
-//	sqlStatement := "SELECT * FROM daerah_kecamatan " +
-//					"ORDER BY daerah_kecamatan.id ASC"
-//	res, err := db.Query(sqlStatement)
+//	bisnisTypeList := entity.BussinessTypeList{}
+//	res, err := UserModel.db.GetDatabase().Query(context.Background(),
+//		sqlStatement,
+//		userID,
+//	)
+//
+//	defer utils.ResClose(res)
+//
 //	if err != nil {
-//		fmt.Println(err)
+//		utils.LogError(err, utils.DetailFunction())
+//		return bisnisTypeList, err
 //	}
-//
-//	result := Exams{}
-//	totalExam := ExamDataTotal{}
 //
 //	for res.Next() {
-//		exam := ExamData{}
-//		err2 := res.Scan(&exam.Id, &exam.Kecamatan)
+//		tipeBisnis := entity.BussinessType{}
+//		err := res.Scan(
+//			&tipeBisnis.UserBussinessTypeID,
+//			&tipeBisnis.UserBussinessType,
+//		)
 //		// Exit if we get an error
-//		if err2 != nil {
-//			fmt.Println(err2)
+//		if err != nil {
+//			utils.LogError(err, utils.DetailFunction())
+//			return bisnisTypeList, err
 //		}
-//		result.Exams = append(result.Exams, exam)
+//		bisnisTypeList.BussinessType = append(bisnisTypeList.BussinessType, tipeBisnis)
 //	}
-//	defer res.Close()
 //
-//	result.Total = totalExam
-//
-//	return result
+//	return bisnisTypeList, nil
 //}

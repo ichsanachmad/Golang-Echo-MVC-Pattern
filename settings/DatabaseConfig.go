@@ -1,42 +1,40 @@
 package settings
 
 import (
-	"database/sql"
+	"Golang-Echo-MVC-Pattern/constant"
+	"Golang-Echo-MVC-Pattern/utils"
+	"context"
 	"fmt"
-	_ "github.com/lib/pq"
-	"time"
+	"github.com/jackc/pgx/v4/pgxpool"
+	"github.com/joho/godotenv"
+	"os"
 )
 
-var db *sql.DB
+var db *pgxpool.Pool
 
-const (
-	host     = "localhost"
-	dbname   = "postgres"
-	user     = "root"
-	password = "root"
-	schema   = "db_covid_palembang"
-)
+type Database struct{}
 
 func init() {
-	var err error
-	psqlInfo := fmt.Sprintf("postgres://%s:%s@%s/%s?sslmode=disable&search_path=%s", user, password, host, dbname, schema)
-	db, err = sql.Open("postgres", psqlInfo)
-
+	err := godotenv.Load()
 	if err != nil {
-		panic(err)
+		println(constant.MessageEnvironment)
 	}
 
-	db.SetMaxOpenConns(80)
-	db.SetConnMaxLifetime(time.Nanosecond)
-	db.SetMaxIdleConns(0)
+	host := os.Getenv(constant.DBHost)
+	dbname := os.Getenv(constant.DBName)
+	user := os.Getenv(constant.DBUser)
+	password := os.Getenv(constant.DBPassword)
+	schema := os.Getenv(constant.DBSchema)
 
-	err = db.Ping()
+	psqlInfo := fmt.Sprintf("postgres://%s:%s@%s/%s?sslmode=disable&search_path=%s", user, password, host, dbname, schema)
+	db, err = pgxpool.Connect(context.Background(), psqlInfo)
 
 	if err != nil {
-		panic(err)
+		utils.LogError(err, utils.DetailFunction())
+		os.Exit(1)
 	}
 }
 
-func GetDatabase() *sql.DB {
+func (Database Database) GetDatabase() *pgxpool.Pool {
 	return db
 }
