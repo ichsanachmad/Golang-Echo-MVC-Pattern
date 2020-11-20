@@ -4,7 +4,6 @@ import (
 	"Golang-Echo-MVC-Pattern/constant"
 	"Golang-Echo-MVC-Pattern/model"
 	"Golang-Echo-MVC-Pattern/responsegraph"
-	"database/sql"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo"
 	"log"
@@ -17,7 +16,7 @@ type ExampleController struct {
 }
 
 // Get Example Controller
-func (ExampleController ExampleController) GetPostsController(c echo.Context, db *sql.DB) error {
+func (ExampleController ExampleController) GetPostsController(c echo.Context) error {
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
@@ -25,7 +24,7 @@ func (ExampleController ExampleController) GetPostsController(c echo.Context, db
 
 	secret := os.Getenv("SECRET_KEY")
 
-	posts := ExampleController.model.GetPosts(secret, db)
+	posts := ExampleController.model.GetPosts(secret)
 	res := responsegraph.ResponseGenericGet{
 		Status:  constant.StatusSuccess,
 		Message: constant.MessageSuccess,

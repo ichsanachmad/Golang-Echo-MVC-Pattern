@@ -2,7 +2,7 @@ package routes
 
 import (
 	"Golang-Echo-MVC-Pattern/controller"
-	"database/sql"
+	"Golang-Echo-MVC-Pattern/utils"
 	"github.com/labstack/echo"
 )
 
@@ -10,13 +10,11 @@ type Routing struct {
 	example controller.ExampleController
 }
 
-func (Routing Routing) GetRoutes(db *sql.DB) *echo.Echo {
+func (Routing Routing) GetRoutes() *echo.Echo {
 	e := echo.New()
 
-	e.POST("/posts/", func(c echo.Context) error {
-		err := Routing.example.GetPostsController(c, db)
-		return err
-	})
+	e.GET("/posts/", Routing.example.GetPostsController)
+	e.POST("/posts/", Routing.example.GetPostsController, utils.Middleware)
 
 	return e
 }
